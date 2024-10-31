@@ -12,10 +12,11 @@ package com.mycompany.simulazione_partita;
 public class Arbitro {
     private int punteggioGiocatore1 = 0; 
     private int punteggioGiocatore2 = 0; 
-    private final int PUNTEGGIO_VINCITA = 25; 
+    private final int punteggio_vincita = 25; 
     private boolean partitaFinita = false; 
 
     // Metodo che aggiorna il punteggio e verifica il vincitore
+    // Synchronized: classe monitor per gestire la mutua dei due thread
     public synchronized boolean aggiornaPunteggio(int idGiocatore) {
         if (partitaFinita) {
             return true; // Se la partita è già finita, ritorna true
@@ -31,10 +32,10 @@ public class Arbitro {
         }
 
         // Verifica vincitore
-        if (punteggioGiocatore1 >= PUNTEGGIO_VINCITA) {
+        if (punteggioGiocatore1 >= punteggio_vincita) {
             System.out.println("Giocatore 1 ha vinto!");
             partitaFinita = true;
-        } else if (punteggioGiocatore2 >= PUNTEGGIO_VINCITA) {
+        } else if (punteggioGiocatore2 >= punteggio_vincita) {
             System.out.println("Giocatore 2 ha vinto!");
             partitaFinita = true;
         }
