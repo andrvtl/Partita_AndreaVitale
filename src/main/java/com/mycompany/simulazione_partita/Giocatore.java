@@ -29,16 +29,30 @@ public class Giocatore implements Runnable {
     // Metodo che viene eseguito quando il thread parte
     public void run() {
         while (true) {
+            synchronized (arbitro) {
             int num = random.nextInt(2) + 1; // Genera un numero casuale tra 1 e 2
             if (num == 1) { // Effettua un punto con una possibilità del 50%
+
+                /* Quando viene effettuato il punto, lancia aggiornaPunteggio, che prende idGiocatore e in base al
+                thread in corso incrementa la rispettiva variabile del punteggio */
                 boolean partitaFinita = arbitro.aggiornaPunteggio(idGiocatore); // Aggiorna punteggio tramite l'arbitro
                 if (partitaFinita) {
+                    arbitro.notify();  // Notifica tutti i thread prima di uscire
                     break; // Interrompe il ciclo se la partita è finita
                 }
             } else {
-                System.out.println("Il giocatore: " + idGiocatore + " non ha effettuato un punto.");
+                System.out.println("Il giocatore " + idGiocatore + " non ha effettuato un punto.");
             }
-            Thread.yield(); // Cede la CPU ad altri thread, permette l'alternanza tra i giocatori
+
+            // Sezione critica: try catch
+            try {
+                arbitro.wait();  // Il thread si mette in attesa
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break; // Uscita dal ciclo in caso di interruzione
+            }
+            arbitro.notify();
         }
+    }
     }
 }
