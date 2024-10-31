@@ -24,6 +24,8 @@ public class Simulazione_partita {
         
         // Crea il secondo giocatore e il thread associato
         Giocatore g2 = new Giocatore(2, arbitro);
-        new Thread(g2, "Andrea").start(); // Passa un nome al thread del secondo giocatore
+        Thread t2 = new Thread(g2);
+        System.out.println("Id giocatore: " + g2.getIdGiocatore() + ", priorità:" + t2.getPriority());
+        t2.start(); // Avvia il thread del primo giocatore
     }
 }
